@@ -1,0 +1,7 @@
+refs:
+    - pip://nmk-python!plugin.yml
+    - pip://nmk-vscode!plugin.yml
+    - github://dynod/workspace/main/shared/shared.yml
+
+config:
+    pythonPackage: aoc2023
