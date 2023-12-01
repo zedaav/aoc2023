@@ -4,7 +4,6 @@ from pathlib import Path
 from aoc2023.puzzle import AOCPuzzle
 
 """
-Template for puzzle solution implementation
 Solutions for https://adventofcode.com/2023/day/1
 """
 
