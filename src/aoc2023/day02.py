@@ -26,7 +26,7 @@ class D02Puzzle(AOCPuzzle):
     def parse_line(self, index: int, line: str) -> str:
         # Super call to get line
         m = GAME_PATTERN.match(super().parse_line(index, line))
-        if m is not None:
+        if m is not None:  # pragma: no branch
             g_id = int(m.group(1))
             g_sets = []
             for g_set in m.group(2).split("; "):
