@@ -1,8 +1,8 @@
-from pathlib import Path
-import re
 import logging
+import re
 from dataclasses import dataclass
-from typing import List, Dict
+from pathlib import Path
+from typing import Dict, List
 
 from aoc2023.puzzle import AOCPuzzle
 
