@@ -66,9 +66,6 @@ class D07Puzzle(AOCPuzzle, ABC):
     def mapping(self) -> Dict[str, str]:  # pragma: no cover
         pass
 
-    def post_process(self, hand_map: Dict[str, int], strength: int) -> int:
-        return strength
-
     def reckon_strength(self, hand_map: Dict[str, int]) -> int:
         hand_len = len(hand_map)
         if hand_len == 5:
@@ -120,9 +117,6 @@ class D07Puzzle(AOCPuzzle, ABC):
             # Reckon strength
             strength = self.reckon_strength(hand_map)
 
-            # Post-process strength
-            strength = self.post_process(hand_map, strength)
-
             # New hand
             h = Hand(strength, comp_str, bid)
             self.hands.append(h)
@@ -147,15 +141,14 @@ class D07Step2Puzzle(D07Puzzle):
     def mapping(self) -> Dict[str, str]:
         return STEP2_COMP_CHAR
 
-    def post_process(self, hand_map: Dict[str, int], strength: int) -> int:
+    def reckon_strength(self, hand_map: Dict[str, int]) -> int:
         hand_len = len(hand_map)
         if "J" in hand_map and 1 < hand_len:
-            # Specific Joker process
+            # Specific Joker process: add jokers count to the biggest group of card
             inv_hand_map = {v: k for k, v in hand_map.items() if k != "J"}
             jokers_nb = hand_map["J"]
             max_others = max(inv_hand_map.keys())
             upgraded_card = inv_hand_map[max_others]
             hand_map[upgraded_card] += jokers_nb
             del hand_map["J"]
-            return self.reckon_strength(hand_map)
-        return strength
+        return super().reckon_strength(hand_map)
