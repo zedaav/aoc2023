@@ -1,9 +1,9 @@
-from typing import Dict
-from abc import ABC, abstractmethod
 import logging
 import re
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict
 
 from aoc2023.puzzle import AOCPuzzle
 
