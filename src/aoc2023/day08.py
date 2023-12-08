@@ -1,8 +1,9 @@
-from math import lcm
 import logging
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from functools import reduce
+from math import gcd
 from pathlib import Path
 from typing import Dict, List
 
@@ -79,6 +80,16 @@ class D08Step1Puzzle(D08Puzzle):
         return len(seqs[0]) - 1  # Don't count first node
 
 
+# Custom multiple gcd (doesn't exist < 3.9)
+def my_lcm_base(x, y):
+    return (x * y) // gcd(x, y)
+
+
+# Custom lcm (doesn't exist < 3.9)
+def my_lcm(*numbers):
+    return reduce(my_lcm_base, numbers, 1)
+
+
 class D08Step2Puzzle(D08Puzzle):
     def start_nodes(self) -> List[str]:
         return [n for n in self.nodes.keys() if n.endswith("A")]
@@ -89,4 +100,4 @@ class D08Step2Puzzle(D08Puzzle):
     def solve(self) -> int:
         seqs = self.build_seqs()
         all_lengths = [len(seq) - 1 for seq in seqs]
-        return lcm(*all_lengths)
+        return my_lcm(*all_lengths)

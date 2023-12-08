@@ -41,20 +41,9 @@ class Hand:
     comp_str: str  # Representative string for comparison for equivalent strength
     bid: int  # Hand bid for final result
 
-    def __eq__(self, other):
-        return (self.strength == other.strength) and (self.comp_str == other.comp_str)
-
-    def __gt__(self, other):
-        return (self.strength > other.strength) or ((self.strength == other.strength) and (self.comp_str > other.comp_str))
-
-    def __ge__(self, other):
-        return (self.strength >= other.strength) or ((self.strength == other.strength) and (self.comp_str >= other.comp_str))
-
+    # Only the "<" operator is used in comparisons
     def __lt__(self, other):
         return (self.strength < other.strength) or ((self.strength == other.strength) and (self.comp_str < other.comp_str))
-
-    def __le__(self, other):
-        return (self.strength <= other.strength) or ((self.strength == other.strength) and (self.comp_str <= other.comp_str))
 
 
 class D07Puzzle(AOCPuzzle, ABC):
@@ -88,10 +77,10 @@ class D07Puzzle(AOCPuzzle, ABC):
             else:
                 # full house (3+2)
                 return 5
-        elif hand_len == 1:
+        elif hand_len == 1:  # pragma: no branch
             # five of a kind
             return 7
-        return 0
+        return 0  # pragma: no cover
 
     def parse_line(self, index: int, line: str) -> str:
         # Parse hand
