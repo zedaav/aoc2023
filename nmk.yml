@@ -5,3 +5,5 @@ refs:
 
 config:
     pythonPackage: aoc2023
+
+    pythonSupportedVersions: ["3.9", "3.10", "3.11"]
