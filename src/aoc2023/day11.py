@@ -1,7 +1,7 @@
 import logging
-from pathlib import Path
 import re
 from itertools import combinations
+from pathlib import Path
 
 from aoc2023.puzzle import AOCPuzzle
 

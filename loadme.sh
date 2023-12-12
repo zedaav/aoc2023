@@ -71,7 +71,7 @@ if test -f /git-bash.exe; then
 else
     # Linux-style venv
     VENV_SUFFIX=bin
-    PYTHON_EXE=python3
+    PYTHON_EXE=python3.9
 fi
 
 # Look for venv

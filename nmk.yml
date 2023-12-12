@@ -7,3 +7,9 @@ config:
     pythonPackage: aoc2023
 
     pythonSupportedVersions: ["3.9", "3.10", "3.11"]
+
+    pythonPath:
+        - ${BASEDIR}/src
+
+    loadMeVenvPython:
+        __resolver__: tests.aoc_nmk.PythonVersion
