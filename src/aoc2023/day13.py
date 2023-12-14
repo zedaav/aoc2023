@@ -94,7 +94,7 @@ class D13Step1Puzzle(D13Puzzle):
         total = 0
         for patterns_pair in self.patterns:
             # Iterate on pairs
-            for pattern in patterns_pair:
+            for pattern in patterns_pair:  # pragma: no branch
                 # Find real reflexions
                 res = self.validate_mirror(pattern)
                 if res != 0:
@@ -112,7 +112,7 @@ class D13Step2Puzzle(D13Puzzle):
         for pattern_id, patterns_pair in enumerate(self.patterns):
             # Iterate on pairs
             pattern_found = False
-            for pair_id, pattern in enumerate(patterns_pair):
+            for pair_id, pattern in enumerate(patterns_pair):  # pragma: no branch
                 # Iterate on lines to find smudges
                 for index, line in enumerate(pattern.patterns):
                     for offset in range(1, len(pattern.patterns) - index, 2):
