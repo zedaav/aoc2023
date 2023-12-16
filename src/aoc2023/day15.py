@@ -1,9 +1,10 @@
 import logging
-from typing import Dict
-from pathlib import Path
-from functools import cache
-from aoc2023.puzzle import AOCPuzzle
 import re
+from functools import cache
+from pathlib import Path
+from typing import Dict
+
+from aoc2023.puzzle import AOCPuzzle
 
 """
 Solutions for https://adventofcode.com/2023/day/15
