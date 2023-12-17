@@ -1,20 +1,11 @@
-from enum import Enum, auto
 from pathlib import Path
 from typing import Dict, Set, Tuple
 
-from aoc2023.puzzle import AOCPuzzle
+from aoc2023.puzzle import OFFSETS, AOCPuzzle, Direction
 
 """
 Solutions for https://adventofcode.com/2023/day/16
 """
-
-
-# Directions
-class Direction(Enum):
-    N = auto()
-    E = auto()
-    S = auto()
-    W = auto()
 
 
 # Turn instructions
@@ -33,13 +24,6 @@ TURN_TO = {
     },
 }
 
-# Offsets
-OFFSETS = {
-    Direction.N: (0, -1),
-    Direction.E: (1, 0),
-    Direction.S: (0, 1),
-    Direction.W: (-1, 0),
-}
 
 # Split instructions
 SPLIT_TO = {"-": (Direction.E, Direction.W), "|": (Direction.N, Direction.S)}

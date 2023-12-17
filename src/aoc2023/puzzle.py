@@ -1,6 +1,32 @@
 from abc import ABC, abstractmethod
+from enum import IntEnum, auto
 from pathlib import Path
 from typing import List, Union
+
+
+# Directions
+class Direction(IntEnum):
+    N = auto()
+    E = auto()
+    S = auto()
+    W = auto()
+
+
+# Opposite directions
+OPPOSITE = {
+    Direction.N: Direction.S,
+    Direction.S: Direction.N,
+    Direction.W: Direction.E,
+    Direction.E: Direction.W,
+}
+
+# Offsets
+OFFSETS = {
+    Direction.N: (0, -1),
+    Direction.E: (1, 0),
+    Direction.S: (0, 1),
+    Direction.W: (-1, 0),
+}
 
 
 # Base class for puzzle solutions
