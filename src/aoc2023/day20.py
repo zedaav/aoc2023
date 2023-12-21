@@ -1,6 +1,7 @@
 import logging
 import re
 from dataclasses import dataclass, field
+from math import lcm
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -52,6 +53,10 @@ class Module:
         # Default: no state
         return ""
 
+    def reset(self):
+        # Reset state: nothing to do by default
+        pass
+
 
 # Broadcaster module
 class BroadcasterModule(Module):
@@ -80,6 +85,9 @@ class FlipFlopModule(Module):
         # Internal state
         return str(self.state)
 
+    def reset(self):
+        self.state = False
+
 
 # Conjunction module
 @dataclass
@@ -101,6 +109,10 @@ class ConjunctionModule(Module):
     def get_state(self) -> str:
         # Internal state
         return str(self.input_states)
+
+    def reset(self):
+        for k in self.input_states.keys():
+            self.input_states[k] = False
 
 
 # Fake button module
@@ -214,7 +226,27 @@ class D20Step2Puzzle(D20Puzzle):
         # Expect all inputs of this conjunction to be conjunctions as well
         assert all(isinstance(m, ConjunctionModule) for m in conj.inputs)
 
-        # TODO: find all button push counts for which the level 2 inputs are low --> level 1 inputs are high --> rx receives low
-        # Then return lcm of them
+        # Find all button push counts for level 1 inputs are high --> rx receives low
+        inputs_pushes = []
+        for conj_input in conj.inputs:
+            # Reset all modules
+            for m in self.modules.values():
+                m.reset()
 
-        return 0
+            # Iterate on button pushes, until getting high pulse for this input
+            pulse_stack = PulseStack()
+            pushes = 0
+            go_on = True
+            while go_on:
+                pushes += 1
+                self.modules["button"].handle_pulse(None, False, pulse_stack)
+                while pulse_stack.stack:
+                    target, source, pulse = pulse_stack.stack.pop(0)
+                    target.handle_pulse(source, pulse, pulse_stack)
+                    if source == conj_input.name and target.name == conj.name and pulse:
+                        go_on = False
+                        break
+            inputs_pushes.append(pushes)
+
+        # Then return lcm of them
+        return lcm(*inputs_pushes)
