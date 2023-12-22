@@ -37,13 +37,11 @@ class Brick:
 
 class D22Puzzle(AOCPuzzle):
     def __init__(self, input_file: Path):
-        self.highest_bottom = 1
         self.bricks: Dict[int, Brick] = {}
         self.min_x = self.min_y = self.max_x = self.max_y = None
         self.next_brick_nb = 1
         super().__init__(input_file)
         logging.info(f"plan corners: {self.min_x},{self.min_y} - {self.max_x},{self.max_y}")
-        logging.info(f"highest brick bottom: {self.highest_bottom}")
 
         # Simplify: both x and y are supposed to be 0-based
         assert self.min_x == 0
@@ -63,10 +61,6 @@ class D22Puzzle(AOCPuzzle):
         brick = Brick(self.next_brick_nb, max(z1, z2), min(z1, z2), plan_cubes)
         self.next_brick_nb += 1
         logging.info(f"new brick: {brick}")
-
-        # Upgrade highest bottom
-        if brick.bottom > self.highest_bottom:
-            self.highest_bottom = brick.bottom
 
         # Upgrade plan corners
         if self.min_x is None or min_x < self.min_x:
