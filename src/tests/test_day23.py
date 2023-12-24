@@ -13,4 +13,4 @@ class TestD23(AOCPuzzleTester):
         self.check_solution(D23Step2Puzzle, "d23.sample.txt", 154)
 
     def test_step2_input(self):
-        self.check_solution(D23Step2Puzzle, "d23.input.txt", 0)
+        self.check_solution(D23Step2Puzzle, "d23.input.txt", 6334)
