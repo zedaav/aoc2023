@@ -22,5 +22,7 @@ wheel
 pytest-xdist
 pytest-cov
 pytest-multilog
+numpy
+z3-solver
 
 

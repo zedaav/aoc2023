@@ -13,3 +13,7 @@ config:
 
     loadMeVenvPython:
         __resolver__: tests.aoc_nmk.PythonVersion
+
+    venvPkgDeps:
+        - numpy
+        - z3-solver
