@@ -24,5 +24,6 @@ pytest-cov
 pytest-multilog
 numpy
 z3-solver
+networkx
 
 

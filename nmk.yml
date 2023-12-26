@@ -17,3 +17,4 @@ config:
     venvPkgDeps:
         - numpy
         - z3-solver
+        - networkx
