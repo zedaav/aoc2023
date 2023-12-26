@@ -9,8 +9,5 @@ class TestD21(AOCPuzzleTester):
     def test_step1_input(self):
         self.check_solution(D21Step1Puzzle, "d21.input.txt", 3729, 64)
 
-    def test_step2_sample(self):
-        self.check_solution(D21Step2Puzzle, "d21.sample.txt", 0)
-
     def test_step2_input(self):
-        self.check_solution(D21Step2Puzzle, "d21.input.txt", 0)
+        self.check_solution(D21Step2Puzzle, "d21.input.txt", 621289922886149, 26501365)

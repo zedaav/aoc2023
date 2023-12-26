@@ -1,6 +1,6 @@
 import logging
+from collections import defaultdict
 from pathlib import Path
-from typing import Tuple
 
 from aoc2023.puzzle import OFFSETS, AOCPuzzle, Direction
 
@@ -16,7 +16,6 @@ class D21Puzzle(AOCPuzzle):
         self.height = 0
         self.start = None
         super().__init__(input_file)
-        self.rock_set = {(r, c) for r in range(self.height) for c in range(self.width) if self.grid[r][c] == "#"}
 
     def parse_line(self, index: int, line: str) -> str:
         line = super().parse_line(index, line)
@@ -31,45 +30,69 @@ class D21Puzzle(AOCPuzzle):
                 self.start = (index - 1, pos)
                 logging.info(f"Start found at row={self.start[0]}, col={self.start[1]}")
 
-    def follow_step(self, pos: Tuple[int, int], steps_limit) -> int:
-        # Keep track of add and even steps result
-        even_positions = set()
-        odd_positions = set()
-        queue = [pos]
-        steps = 0
+    def possible_points(self, point):
+        # Loop over all possible directions, and yield each possible new point
+        # Check the remainder of the point axis' divided by grid size to continue moving outward infinitely for part 2
+        for d in Direction:
+            offset = OFFSETS[d]
+            new_point = (point[0] + offset[0], point[1] + offset[1])
+            if self.grid[new_point[1] % self.height][new_point[0] % self.width] != "#":  # Make sure it wasn't a rock
+                yield new_point
 
-        # Iterate until end condition
-        while steps < steps_limit:
-            steps += 1
-            positions_set = odd_positions if steps % 2 else even_positions
+    def bfs(self, point, max_dist):
+        # Use the Breadth first search to find the number of points hit each step, and return the dictionary with key of number of steps taken,
+        # and value of number of points hit
+        tiles = defaultdict(int)
+        visited = set()
+        queue = [(point, 0)]
+        while queue:  # End when the queue is empty
+            curr_point, dist = queue.pop(0)
+            if dist == (max_dist + 1) or curr_point in visited:  # Don't include points that have already been visited
+                continue
 
-            # Iterate on positions to be processed for this step
-            new_queue = []
-            while queue:
-                row, col = queue.pop(0)
+            tiles[dist] += 1
+            visited.add(curr_point)
 
-                # Iterate on directions
-                for direction in Direction:
-                    row_offset, col_offset = OFFSETS[direction]
-                    new_row, new_col = row + row_offset, col + col_offset
-                    new_pos = (new_row, new_col)
-                    if (new_pos in self.rock_set) or (new_pos in positions_set):
-                        # New position is either a rock, or already counted in this odd/even set
-                        continue
+            for next_point in self.possible_points(curr_point):  # Loop over possible points and add to queue
+                queue.append((next_point, (dist + 1)))
+        return tiles
 
-                    # Remember as a new position to be processed
-                    new_queue.append(new_pos)
-                    positions_set.add(new_pos)
-            queue = new_queue
+    def calculate_possible_spots(self, start, max_steps):
+        # Get the output from bfs, and then return the sum of all potential stopping points in the tiles output based on even numbers
+        tiles = self.bfs(start, max_steps)
+        return sum(amount for distance, amount in tiles.items() if distance % 2 == max_steps % 2)
 
-        return len(even_positions)
+    def quad(self, y, n):
+        # Use the quadratic formula to find the output at the large steps based on the first three data points
+        a = (y[2] - (2 * y[1]) + y[0]) // 2
+        b = y[1] - y[0] - a
+        c = y[0]
+        return (a * n**2) + (b * n) + c
 
 
 class D21Step1Puzzle(D21Puzzle):
     def solve(self, steps: int) -> int:
-        return self.follow_step(self.start, steps)
+        return self.calculate_possible_spots(self.start, steps)
 
 
 class D21Step2Puzzle(D21Puzzle):
-    def solve(self) -> int:
-        return 0
+    def solve(self, steps: int) -> int:
+        # Calculate the first three data points for use in the quadratic formula, and then return the output of quad
+        size = self.height
+        edge = size // 2
+
+        y = [self.calculate_possible_spots(self.start, (edge + i * size)) for i in range(3)]
+
+        return self.quad(y, ((steps - edge) // size))
+
+    def solve2(self, steps: int) -> int:
+        # Possible spots in 3 positions
+        half = self.width // 2
+        candidates = [self.follow_steps(half + i * self.width) for i in range(3)]
+
+        # Quadratic formula
+        a = (candidates[2] - (2 * candidates[1]) + candidates[0]) // 2
+        b = candidates[1] - candidates[0] - a
+        c = candidates[0]
+        n = (steps - half) // self.width
+        return (a * n**2) + (b * n) + c
